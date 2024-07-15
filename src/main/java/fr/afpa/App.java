@@ -58,7 +58,7 @@ public class App extends Application {
        HBox numHBox2 = new HBox(b5,b6,b7,b8,b9);
        numHBox1.setAlignment(Pos.CENTER);
        numHBox2.setAlignment(Pos.CENTER);
-       VBox acionBox = new VBox(clearbButton, calculateButton);
+       VBox actionBox = new VBox(clearbButton, calculateButton);
        VBox vBoxNum = new VBox(numHBox1,numHBox2);
 
 
