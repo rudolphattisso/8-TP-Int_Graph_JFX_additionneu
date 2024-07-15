@@ -1,82 +1,106 @@
 package fr.afpa;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
 
 /**
  * JavaFX App
  */
 public class App extends Application {
 
+    private int sum;
     public static void main(String[] args) {
         launch();
     }
 
-
     @Override
     public void start(Stage stage) {
         stage.setTitle("Additionneur");
-        //instanciation
-        TextField displaField = new TextField();
-        displaField.setEditable(false);
-       
-        // int numberButton;
-        // for (int i=0; i<=numberButton ; i++) {
-        //     Button b = new Button (Integer.toString(i)); 
-        // }
-    //buttons    
-       Button b0 = new Button("0");
-       Button b1 = new Button("1");
-       Button b2 = new Button("2");
-       Button b3 = new Button("3");
-       Button b4 = new Button("4");
-       Button b5 = new Button("5");
-       Button b6 = new Button("6");
-       Button b7 = new Button("7");
-       Button b8 = new Button("8");
-       Button b9 = new Button("9");
-       Button clearbButton = new Button("Clear");
-       Button calculateButton = new Button("Calculate");
-       
-       
 
-    //Vboxes
-      
+        // champ
+        TextArea area = new TextArea();
+        area.setEditable(false);
+
+
+        HBox hBoxNum1 = new HBox();
+        hBoxNum1.setSpacing(5);
+        hBoxNum1.setAlignment(Pos.CENTER);
         
-       // horizontal
-       HBox numHBox1 = new HBox(b0,b1,b2,b3,b4);
-       HBox numHBox2 = new HBox(b5,b6,b7,b8,b9);
-       numHBox1.setAlignment(Pos.CENTER);
-       numHBox2.setAlignment(Pos.CENTER);
-       VBox actionBox = new VBox(clearbButton, calculateButton);
-       VBox vBoxNum = new VBox(numHBox1,numHBox2);
+        HBox hBoxNum2 = new HBox();
+        hBoxNum2.setSpacing(5);
+        hBoxNum2.setAlignment(Pos.CENTER);
 
+        int nbBoutons = 9;
+        for (int i = 0; i <= nbBoutons; i++) {
+            Button button = new Button(String.valueOf(i));
 
+            button.setOnAction(event -> {
+                // Utilisation de l'objet événement pour obtenir le bouton cliqué
+                Button clickedButton = (Button) event.getTarget();
+                String textButton = clickedButton.getText();
+                area.setText(area.getText() + textButton + "+");
+                sum = sum + Integer.valueOf(clickedButton.getText());
+            });
+                
+            if (i <= 4) {
+                hBoxNum1.getChildren().add(button);
+            }else  {
+                hBoxNum2.getChildren().add(button);
+            }
 
-       GridPane boxPan = new GridPane();
-        boxPan.add(displaField, 0,0,1,4);
-         boxPan.add(vBoxNum,0,1,5,2);
+        }
 
-       
+        Button clearbButton = new Button("Clear");
+        clearbButton.setOnAction(e -> {// action qui efface les données du champs
+            area.clear();
+        });
 
-        
+        Button calculateButton = new Button("Calculate");
+        calculateButton.setOnAction(new EventHandler<ActionEvent>() {// action qui qui va permettre l'addition;
 
-      
-        var scene = new Scene(boxPan);
+            @Override
+            public void handle(ActionEvent event) {
+
+             area.setText(String.valueOf(sum));
+            }
+
+        });
+
+        // 1/ déclarer: Textfiel 9 boutons à mettre dans un GridPane 2 boutons à mettre
+        // dans une Hbox mettre les 3 dans une Vbox
+
+        // Vboxes
+
+        // horizontal; avec les boutons action;
+        HBox actionHBox1 = new HBox(clearbButton, calculateButton);
+        actionHBox1.setSpacing(15);
+        actionHBox1.setAlignment(Pos.CENTER);
+
+        // conteneur horizontal pour les bouttons;|
+
+        // VBox vBoxForH = new VBox(hBoxNum1,hBoxNum2);
+
+        // grille pour placer les boutton et le champ;
+        // GridPane gridBox = new GridPane();
+        // gridBox.setAlignment(Pos.CENTER);
+
+        // gridBox.add(hBoxNumZ,0,7,7,2);
+
+        // Vbox qui recupère toutes les VBOX;
+        VBox totalVbox = new VBox(area, hBoxNum1, hBoxNum2, actionHBox1);
+
+        var scene = new Scene(totalVbox);
         stage.setScene(scene);
         stage.show();
-        
-    }
 
+    }
 
 }
